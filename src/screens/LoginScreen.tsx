@@ -22,6 +22,7 @@ const LoginScreen: React.FC<Props> = ({ onConnect, error }) => {
       />
       {error ? <Text style={styles.error}>{error}</Text> : null}
       <Button title="Conectar" onPress={() => onConnect(code)} />
+      <Text style={styles.explanation}>El profesor le dará el código de sesión</Text>
     </View>
   );
 };
@@ -31,6 +32,7 @@ const styles = StyleSheet.create({
   title: { fontSize: 20, marginBottom: 16 },
   input: { borderWidth: 1, borderColor: '#ccc', borderRadius: 4, padding: 8, width: '80%', marginBottom: 16 },
   error: { color: 'red', marginBottom: 8 },
+  explanation: { fontSize: 14, color: '#888', marginTop: 16, textAlign: 'center' },
 });
 
 export default LoginScreen;

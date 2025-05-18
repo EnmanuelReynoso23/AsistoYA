@@ -1,4 +1,3 @@
-
 # AsistoYA App
 
 Aplicación móvil React Native (TypeScript) para AsistoYA.
@@ -56,3 +55,29 @@ npx react-native run-ios
 - Ajusta las URLs de API y credenciales en los servicios según tu backend.
 - El login es por código de sesión generado en la app de escritorio.
 - El historial de notificaciones incluye push (Firebase) y SMS (Twilio).
+
+## Funcionalidad de Perfil
+
+La aplicación ahora incluye una nueva funcionalidad para mostrar la información del perfil del usuario en la pantalla de inicio.
+
+### Componente Profile
+
+El componente `Profile` se encuentra en `src/components/Profile.tsx` y se utiliza para mostrar la información del perfil del usuario. Recibe las siguientes props:
+
+- `name`: Nombre del usuario
+- `email`: Email del usuario
+- `phone`: Teléfono del usuario
+
+### Uso del Componente Profile
+
+El componente `Profile` se utiliza en la pantalla de inicio (`HomeScreen`) para mostrar la información del perfil del usuario. La pantalla de inicio se encuentra en `src/screens/HomeScreen.tsx`.
+
+### Hook useProfile
+
+El hook `useProfile` se encuentra en `src/hooks/useProfile.ts` y se utiliza para obtener y gestionar los datos del perfil del usuario. Este hook maneja los estados de `profile`, `loading` y `error`.
+
+### Instrucciones para Obtener y Mostrar Datos del Perfil
+
+1. El `AppNavigator` utiliza el hook `useProfile` para obtener los datos del perfil del usuario.
+2. Los datos del perfil se pasan como props al componente `HomeScreen`.
+3. El componente `HomeScreen` utiliza el componente `Profile` para mostrar la información del perfil del usuario.

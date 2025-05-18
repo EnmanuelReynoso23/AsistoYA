@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { onMessageListener } from '../services/firebaseService';
+import { onMessageListener, handleWebPushNotification } from '../services/firebaseService';
 import { receiveSms } from '../services/twilioService';
 import { NotificationItem } from '../screens/HomeScreen';
 
@@ -32,6 +32,20 @@ export const useNotifications = () => {
         ...prev,
       ]));
     });
+
+    // Simulate fetching web push notifications
+    const fetchWebPushNotifications = async () => {
+      // Simulate fetching web push notifications from a mock API
+      const response = await fetch('https://mockapi.io/web-push-notifications');
+      const data = await response.json();
+      setNotifications(prev => ([
+        ...data.map((notification: any) => handleWebPushNotification(notification)),
+        ...prev,
+      ]));
+    };
+
+    fetchWebPushNotifications();
+
     return () => unsubscribe();
   }, []);
 

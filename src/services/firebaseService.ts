@@ -1,4 +1,3 @@
-// Configuración y lógica de Firebase Messaging
 import messaging from '@react-native-firebase/messaging';
 
 export const requestFirebasePermission = async () => {
@@ -17,4 +16,17 @@ export const onMessageListener = (callback: (msg: any) => void) => {
   return messaging().onMessage(async remoteMessage => {
     callback(remoteMessage);
   });
+};
+
+// Add logic for handling web push notifications
+export const handleWebPushNotification = (notification: any) => {
+  // Process the web push notification
+  const { title, message, timestamp } = notification;
+  return {
+    id: notification.id || Date.now().toString(),
+    title,
+    message,
+    timestamp,
+    type: 'web-push' as 'web-push',
+  };
 };

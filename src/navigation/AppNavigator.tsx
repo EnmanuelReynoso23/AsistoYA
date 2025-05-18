@@ -3,10 +3,12 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import LoginScreen from '../screens/LoginScreen';
 import HomeScreen, { NotificationItem } from '../screens/HomeScreen';
+import { useProfile } from '../hooks/useProfile';
+import { Text } from 'react-native';
 
 export type RootStackParamList = {
   Login: undefined;
-  Home: { notifications: NotificationItem[] };
+  Home: { notifications: NotificationItem[], profile: { name: string, email: string, phone: string } };
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -18,33 +20,40 @@ interface Props {
   loginError?: string;
 }
 
-
-
 const LoginScreenWrapper = (props: any) => {
   // Recibe onConnect y loginError como props
   return <LoginScreen onConnect={props.onConnect} error={props.loginError} />;
 };
 
 const HomeScreenWrapper = (props: any) => {
-  return <HomeScreen notifications={props.notifications} />;
+  return <HomeScreen notifications={props.notifications} profile={props.profile} />;
 };
 
+const AppNavigator: React.FC<Props> = ({ isLoggedIn, notifications, onConnect, loginError }) => {
+  const { profile, loading, error } = useProfile();
 
+  if (loading) {
+    return <Text>Cargando perfil...</Text>;
+  }
 
+  if (error) {
+    return <Text>Error al cargar perfil: {error}</Text>;
+  }
 
-const AppNavigator: React.FC<Props> = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Login">
         <Stack.Screen
           name="Login"
           options={{ headerShown: false }}
-          component={LoginScreen}
+          component={LoginScreenWrapper}
+          initialParams={{ onConnect, loginError }}
         />
         <Stack.Screen
           name="Home"
           options={{ headerShown: false }}
-          component={HomeScreen}
+          component={HomeScreenWrapper}
+          initialParams={{ notifications, profile }}
         />
       </Stack.Navigator>
     </NavigationContainer>
