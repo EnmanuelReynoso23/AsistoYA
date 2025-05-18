@@ -1,21 +1,28 @@
 import React from 'react';
 import { View, Text, FlatList, StyleSheet } from 'react-native';
+import Profile from '../components/Profile';
 
 export interface NotificationItem {
   id: string;
   title: string;
   message: string;
   timestamp: string;
-  type: 'push' | 'sms';
+  type: 'push' | 'sms' | 'web-push';
 }
 
 interface Props {
   notifications: NotificationItem[];
+  profile: {
+    name: string;
+    email: string;
+    phone: string;
+  };
 }
 
-const HomeScreen: React.FC<Props> = ({ notifications }) => {
+const HomeScreen: React.FC<Props> = ({ notifications, profile }) => {
   return (
     <View style={styles.container}>
+      <Profile name={profile.name} email={profile.email} phone={profile.phone} />
       <Text style={styles.title}>Notificaciones recibidas</Text>
       <FlatList
         data={notifications}
