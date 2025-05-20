@@ -42,19 +42,31 @@ const AppNavigator: React.FC<Props> = ({ isLoggedIn, notifications, onConnect, l
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Login">
+      <Stack.Navigator initialRouteName="Login" id={undefined}>
         <Stack.Screen
           name="Login"
           options={{ headerShown: false }}
-          component={LoginScreenWrapper}
-          initialParams={{ onConnect, loginError }}
-        />
+        >
+          {props => (
+            <LoginScreenWrapper
+              {...props}
+              onConnect={onConnect}
+              loginError={loginError}
+            />
+          )}
+        </Stack.Screen>
         <Stack.Screen
           name="Home"
           options={{ headerShown: false }}
-          component={HomeScreenWrapper}
-          initialParams={{ notifications, profile }}
-        />
+        >
+          {props => (
+            <HomeScreenWrapper
+              {...props}
+              notifications={notifications}
+              profile={profile}
+            />
+          )}
+        </Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>
   );
