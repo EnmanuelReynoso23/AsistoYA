@@ -6,6 +6,7 @@ const SettingsScreen: React.FC = () => {
   const { logout } = useSession();
   const [pushNotificationsEnabled, setPushNotificationsEnabled] = useState(true);
   const [smsFallbackEnabled, setSmsFallbackEnabled] = useState(true);
+  const [attendanceNotificationsEnabled, setAttendanceNotificationsEnabled] = useState(true);
 
   const handleLogout = () => {
     logout();
@@ -26,6 +27,13 @@ const SettingsScreen: React.FC = () => {
         <Switch
           value={smsFallbackEnabled}
           onValueChange={setSmsFallbackEnabled}
+        />
+      </View>
+      <View style={styles.setting}>
+        <Text style={styles.label}>Notificaciones de Asistencia</Text>
+        <Switch
+          value={attendanceNotificationsEnabled}
+          onValueChange={setAttendanceNotificationsEnabled}
         />
       </View>
       <View style={styles.setting}>

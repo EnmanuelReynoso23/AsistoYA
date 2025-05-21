@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, StyleSheet, Button } from 'react-native';
+import { useSession } from '../hooks/useSession';
+import { fetchAttendanceHistory } from '../services/attendanceService';
 
 interface AttendanceRecord {
   date: string;
@@ -8,12 +10,17 @@ interface AttendanceRecord {
 }
 
 const AttendanceHistoryScreen: React.FC = () => {
+  const { sessionCode } = useSession();
   const [filter, setFilter] = useState<'month' | 'week'>('month');
-  const [attendanceRecords, setAttendanceRecords] = useState<AttendanceRecord[]>([
-    { date: '2023-09-01', status: 'Asistió', detectionTime: '08:00' },
-    { date: '2023-09-02', status: 'Ausente', detectionTime: '' },
-    { date: '2023-09-03', status: 'Llegó tarde', detectionTime: '08:15' },
-  ]);
+  const [attendanceRecords, setAttendanceRecords] = useState<AttendanceRecord[]>([]);
+
+  useEffect(() => {
+    if (sessionCode) {
+      fetchAttendanceHistory(sessionCode).then(records => {
+        setAttendanceRecords(records);
+      });
+    }
+  }, [sessionCode]);
 
   const filterRecords = (filter: 'month' | 'week') => {
     // Logic to filter records by month or week

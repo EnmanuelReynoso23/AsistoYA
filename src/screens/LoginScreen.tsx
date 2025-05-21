@@ -2,12 +2,20 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 
 interface Props {
-  onConnect: (code: string) => void;
+  onConnect: (code: string) => Promise<boolean>;
   error?: string;
 }
 
 const LoginScreen: React.FC<Props> = ({ onConnect, error }) => {
   const [code, setCode] = useState('');
+
+  const handleConnect = async () => {
+    const success = await onConnect(code);
+    if (success) {
+      // Fetch and display attendance information upon successful login
+      // This logic will be handled in the parent component
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -21,7 +29,7 @@ const LoginScreen: React.FC<Props> = ({ onConnect, error }) => {
         keyboardType="default"
       />
       {error ? <Text style={styles.error}>{error}</Text> : null}
-      <Button title="Conectar" onPress={() => onConnect(code)} />
+      <Button title="Conectar" onPress={handleConnect} />
       <Text style={styles.explanation}>El profesor le dará el código de sesión</Text>
     </View>
   );
