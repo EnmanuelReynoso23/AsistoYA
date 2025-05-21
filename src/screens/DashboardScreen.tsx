@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { useSession } from '../hooks/useSession';
 
 interface DashboardScreenProps {
   studentName: string;
@@ -14,8 +15,17 @@ const DashboardScreen: React.FC<DashboardScreenProps> = ({
   lastFacialDetectionTime,
   lastRollCallTime,
 }) => {
-  const getStatusText = () => {
-    switch (attendanceStatus) {
+  const { sessionCode, attendanceInfo } = useSession();
+  const [attendanceStatusText, setAttendanceStatusText] = useState<string>('');
+
+  useEffect(() => {
+    if (attendanceInfo) {
+      setAttendanceStatusText(getStatusText(attendanceInfo.status));
+    }
+  }, [attendanceInfo]);
+
+  const getStatusText = (status: 'attended' | 'absent' | 'pending') => {
+    switch (status) {
       case 'attended':
         return '✅ Asistió a clases hoy';
       case 'absent':
@@ -33,7 +43,7 @@ const DashboardScreen: React.FC<DashboardScreenProps> = ({
       <Text style={styles.label}>Nombre del estudiante:</Text>
       <Text style={styles.value}>{studentName}</Text>
       <Text style={styles.label}>Estado de asistencia actual:</Text>
-      <Text style={styles.value}>{getStatusText()}</Text>
+      <Text style={styles.value}>{attendanceStatusText}</Text>
       <Text style={styles.label}>Última hora de detección facial:</Text>
       <Text style={styles.value}>{lastFacialDetectionTime}</Text>
       <Text style={styles.label}>Fecha y hora del último pase de lista:</Text>
