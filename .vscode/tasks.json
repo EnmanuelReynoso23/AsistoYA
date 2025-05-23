@@ -2,17 +2,11 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "start-android",
+      "label": "build-android",
       "type": "shell",
-      "command": "npx react-native run-android",
+      "command": "npx expo run:android",
       "group": "build",
-      "problemMatcher": []
-    },
-    {
-      "label": "start-ios",
-      "type": "shell",
-      "command": "npx react-native run-ios",
-      "group": "build",
+      "isBackground": false,
       "problemMatcher": []
     }
   ]

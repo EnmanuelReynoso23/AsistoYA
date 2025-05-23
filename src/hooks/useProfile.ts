@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 interface Profile {
   name: string;
@@ -7,26 +7,14 @@ interface Profile {
 }
 
 export const useProfile = () => {
-  const [profile, setProfile] = useState<Profile | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        // Simulate fetching profile data from a mock API
-        const response = await fetch('https://mockapi.io/profile');
-        const data = await response.json();
-        setProfile(data);
-      } catch (err) {
-        setError('Failed to fetch profile data');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProfile();
-  }, []);
+  // Siempre modo invitado
+  const [profile] = useState<Profile>({
+    name: 'Invitado',
+    email: 'invitado@asistoya.com',
+    phone: '---',
+  });
+  const [loading] = useState(false);
+  const [error] = useState<string | null>(null);
 
   return { profile, loading, error };
 };

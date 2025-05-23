@@ -1,29 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { useSession } from '../hooks/useSession';
 
 interface DashboardScreenProps {
-  studentName: string;
-  attendanceStatus: 'attended' | 'absent' | 'pending';
-  lastFacialDetectionTime: string;
-  lastRollCallTime: string;
+  studentName?: string;
+  attendanceStatus?: 'attended' | 'absent' | 'pending';
+  lastFacialDetectionTime?: string;
+  lastRollCallTime?: string;
 }
 
 const DashboardScreen: React.FC<DashboardScreenProps> = ({
-  studentName,
-  attendanceStatus,
-  lastFacialDetectionTime,
-  lastRollCallTime,
+  studentName = 'Invitado',
+  attendanceStatus = 'pending',
+  lastFacialDetectionTime = '--:--',
+  lastRollCallTime = '--:--',
 }) => {
-  const { sessionCode, attendanceInfo } = useSession();
-  const [attendanceStatusText, setAttendanceStatusText] = useState<string>('');
-
-  useEffect(() => {
-    if (attendanceInfo) {
-      setAttendanceStatusText(getStatusText(attendanceInfo.status));
-    }
-  }, [attendanceInfo]);
-
   const getStatusText = (status: 'attended' | 'absent' | 'pending') => {
     switch (status) {
       case 'attended':
@@ -40,14 +30,16 @@ const DashboardScreen: React.FC<DashboardScreenProps> = ({
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Panel Principal</Text>
-      <Text style={styles.label}>Nombre del estudiante:</Text>
-      <Text style={styles.value}>{studentName}</Text>
-      <Text style={styles.label}>Estado de asistencia actual:</Text>
-      <Text style={styles.value}>{attendanceStatusText}</Text>
-      <Text style={styles.label}>Última hora de detección facial:</Text>
-      <Text style={styles.value}>{lastFacialDetectionTime}</Text>
-      <Text style={styles.label}>Fecha y hora del último pase de lista:</Text>
-      <Text style={styles.value}>{lastRollCallTime}</Text>
+      <View style={styles.card}>
+        <Text style={styles.label}>Nombre del estudiante:</Text>
+        <Text style={styles.value}>{studentName}</Text>
+        <Text style={styles.label}>Estado de asistencia actual:</Text>
+        <Text style={[styles.value, attendanceStatus === 'attended' ? styles.attended : attendanceStatus === 'absent' ? styles.absent : styles.pending]}>{getStatusText(attendanceStatus)}</Text>
+        <Text style={styles.label}>Última hora de detección facial:</Text>
+        <Text style={styles.value}>{lastFacialDetectionTime}</Text>
+        <Text style={styles.label}>Fecha y hora del último pase de lista:</Text>
+        <Text style={styles.value}>{lastRollCallTime}</Text>
+      </View>
     </View>
   );
 };
@@ -55,23 +47,53 @@ const DashboardScreen: React.FC<DashboardScreenProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
-    backgroundColor: '#fff',
+    padding: 24,
+    backgroundColor: '#F7F9FA',
   },
   title: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: 'bold',
-    marginBottom: 16,
+    marginBottom: 24,
+    color: '#007AFF',
+    textAlign: 'center',
+    letterSpacing: 1,
+  },
+  card: {
+    backgroundColor: '#fff',
+    borderRadius: 14,
+    padding: 24,
+    shadowColor: '#000',
+    shadowOpacity: 0.08,
+    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 4 },
+    elevation: 3,
   },
   label: {
-    fontSize: 18,
+    fontSize: 17,
     fontWeight: 'bold',
-    marginTop: 8,
+    marginTop: 14,
+    color: '#333',
   },
   value: {
-    fontSize: 16,
+    fontSize: 17,
     marginBottom: 8,
+    color: '#555',
+  },
+  attended: {
+    color: '#34C759',
+    fontWeight: 'bold',
+  },
+  absent: {
+    color: '#D32F2F',
+    fontWeight: 'bold',
+  },
+  pending: {
+    color: '#FF9500',
+    fontWeight: 'bold',
   },
 });
+
+// Eliminado todo lo relacionado a useSession, bases de datos o servicios externos
+// Este componente ahora es 100% local y solo depende de las props recibidas
 
 export default DashboardScreen;
